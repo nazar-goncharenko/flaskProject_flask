@@ -1,4 +1,4 @@
-# flaskProject_flask
+# flaskProject
 
 ## Python 3.7.*
 

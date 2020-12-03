@@ -98,35 +98,28 @@ class User(db.Model):
     userStatus = db.Column('userstatus', db.INTEGER, nullable=False)
 
 
-class Photo(db.Model):
-    __tablename__ = 'photo'
-
-    id = db.Column('id', db.INTEGER, primary_key=True)
-    photoUrl = db.Column('photourl', db.VARCHAR(100), nullable=False)
-
-
 class Article(db.Model):
     __tablename__ = 'article'
 
     id = db.Column('id', db.INTEGER, primary_key=True)
     name = db.Column('name', db.VARCHAR(20), nullable=False)
-    photo_id = db.Column(db.INTEGER, db.ForeignKey(Photo.id))
-    photo = db.relationship("Photos")
+    photourl = db.Column('photourl', db.VARCHAR(40))
 
 
-class Photos(db.Model):
-    __tablename__ = 'photos'
+import enum
+
+class StatusEnum(enum.Enum):
+    pending = 'pending'
+    done = 'done'
+
+
+class PArticle(db.Model):
+    __tablename__ = 'particle'
 
     id = db.Column('id', db.INTEGER, primary_key=True)
-    # article_id = db.Column('article_id', db.INTEGER, db.ForeignKey(Article.id))
-    # article = db.relationship(Article, backref=db.backref("article"))
-    # photo_id = db.Column('photo_id', db.INTEGER, db.ForeignKey(Photo.id))
-    # photo = db.relationship(Photo, backref=db.backref("photo"))
-    article_id = db.Column(db.INTEGER, db.ForeignKey(Article.id))
-    article = db.relationship(Article, backref=db.backref("article"))
-    photo_id = db.Column(db.INTEGER, db.ForeignKey(Photo.id))
-    photo = db.relationship(Photo, backref=db.backref("photo"))
-
+    name = db.Column('name', db.VARCHAR(20), nullable=False)
+    photourl = db.Column('photourl', db.VARCHAR(40))
+    status = db.Column('status', db.Enum(StatusEnum), nullable=False)
 
 # class User(db.Model):
 #     __tablename__ = 'user'

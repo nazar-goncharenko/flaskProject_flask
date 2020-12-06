@@ -10,11 +10,14 @@ def create_user():
     username = request.json.get('username', None)
     password = request.json.get('password', None)
     email = request.json.get('email', None)
-    new_user = User(userName=username, email=email, password=password, userStatus=23)
-    db.session.add(new_user)
-    db.session.commit()
+    if username and password and email:
+        new_user = User(userName=username, email=email, password=password, userStatus=23)
+        db.session.add(new_user)
+        db.session.commit()
 
-    return jsonify(status='created'), 200
+        return jsonify(status='created'), 200
+    else:
+        return jsonify(status='Bad data'), 204
 
 
 @app.route('/users/<id>', methods=['GET', 'PUT', 'DELETE'])
@@ -31,11 +34,14 @@ def userId(id):
         username = request.json.get('username', None)
         password = request.json.get('password', None)
         email = request.json.get('email', None)
-        user.userName = username
-        user.email = email
-        user.password = generate_password_hash(password)
-        db.session.commit()
-        return jsonify(status='updated', name=user.userName, email=user.email), 201
+        if username and password and email:
+            user.userName = username
+            user.email = email
+            user.password = generate_password_hash(password)
+            db.session.commit()
+            return jsonify(status='updated', name=user.userName, email=user.email), 202
+        else:
+            return jsonify(status='Bad data'), 204
 
     if request.method == 'DELETE':
         db.session.delete(user)

@@ -43,7 +43,7 @@ def get_article_by_id(id):
     if article is None:
         return jsonify(status='article not found'), 404
 
-    return jsonify(article={'id': article.id, 'text': article.text, 'name': article.name})
+    return jsonify(article={'id': article.id, 'text': article.text, 'name': article.name}), 200
 
 
 @app.route('/articles', methods=['GET'])
@@ -83,6 +83,6 @@ def update_article(id):  # noqa: E501
         particle = PArticle(name=new_name, text=new_text, status=StatusEnum.pending, article=article)
         db.session.add(particle)
         db.session.commit()
-        return jsonify(status='added to pArticle'), 201
+        return jsonify(status='added to pArticle'), 202
     else:
-        return jsonify(status='Bad input data')
+        return jsonify(status='Bad input data'), 204

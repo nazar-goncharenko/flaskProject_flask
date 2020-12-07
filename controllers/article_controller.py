@@ -32,6 +32,9 @@ def delete_article(id):  # noqa: E501
     if article is None:
         return jsonify(status='article not found'), 404
 
+    p_article_list = PArticle.query.filter_by(article_id=article.id)
+    for var in p_article_list:
+        db.session.delete(var)
     db.session.delete(article)
     db.session.commit()
     return jsonify(status='deleted'), 201

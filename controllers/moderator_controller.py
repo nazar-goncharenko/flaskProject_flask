@@ -7,8 +7,6 @@ from flask import request, jsonify, json
 def change_pending_p_article_by_id(id):  # noqa: E501
     """get list of pending article
 
-    get pending article # noqa: E501
-
     :param id: The name that needs to be fetched. Use user1 for testing.
     :type id: int
 
@@ -52,8 +50,6 @@ def get_pending_articles():  # noqa: E501
 @app.route('/moderator/pendarticle/<id>', methods=['GET'])
 def get_pending_article_by_id(id):  # noqa: E501
     """get list of pending article
-
-    get pending article # noqa: E501
 
     :param id: The name that needs to be fetched. Use user1 for testing.
     :type id: int

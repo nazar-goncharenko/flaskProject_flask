@@ -9,12 +9,17 @@ class User(db.Model):
     email = db.Column('email', db.VARCHAR(30), nullable=False)
     password = db.Column('password', db.VARCHAR(255), nullable=False)
     userStatus = db.Column('userstatus', db.INTEGER, nullable=False)
+    role = db.Column('role', db.VARCHAR(255), nullable=False)
 
-    def __init__(self, userName, email, password, userStatus):
+    def __init__(self, userName, email, password, userStatus, role):
         self.userName = userName
         self.email = email
         self.password = generate_password_hash(password)
         self.userStatus = userStatus
+        self.role = role
+
+    def get_role(self):
+        return [self.role]
 
 class Article(db.Model):
     __tablename__ = 'article'

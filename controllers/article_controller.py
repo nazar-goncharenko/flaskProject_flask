@@ -1,14 +1,23 @@
-from app import app
+from app import app, auth, db
 from models import *
 from flask import request, jsonify, json
 
 
 @app.route('/articles', methods=['POST'])
+@auth.login_required
 def add_article():  # noqa: E501
     """adds an inventory item
 
     Adds an item to the system
     """
+    user_email = auth.current_user()
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return jsonify(status='not found user'), 404
+
+    if user.role != 'user' and user.role != 'moderator':
+        return jsonify(status='wrong role'), 404
+
     name = request.json.get('name', None)
     text = request.json.get('text', None)
     if name and text:
@@ -19,6 +28,7 @@ def add_article():  # noqa: E501
 
 
 @app.route('/articles/<id>', methods=['DELETE'])
+@auth.login_required
 def delete_article(id):  # noqa: E501
     """Delete article
 
@@ -28,6 +38,14 @@ def delete_article(id):  # noqa: E501
     :type id: int
 
     """
+    user_email = auth.current_user()
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return jsonify(status='not found user'), 404
+
+    if user.role != 'user' and user.role != 'moderator':
+        return jsonify(status='wrong role'), 404
+
     article = Article.query.filter_by(id=id).first()
     if article is None:
         return jsonify(status='article not found'), 404
@@ -40,8 +58,17 @@ def delete_article(id):  # noqa: E501
     return jsonify(status='deleted'), 201
 
 
-@app.route('/articles/<id>')
+@app.route('/articles/<id>', methods=['GET'])
+@auth.login_required
 def get_article_by_id(id):
+    user_email = auth.current_user()
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return jsonify(status='not found user'), 404
+
+    if user.role != 'user' and user.role != 'moderator':
+        return jsonify(status='wrong role'), 404
+
     article = Article.query.filter_by(id=id).first()
     if article is None:
         return jsonify(status='article not found'), 404
@@ -50,6 +77,7 @@ def get_article_by_id(id):
 
 
 @app.route('/articles', methods=['GET'])
+@auth.login_required
 def get_all_articles():  # noqa: E501
     """searches inventory
 
@@ -58,6 +86,14 @@ def get_all_articles():  # noqa: E501
 
     :rtype: None
     """
+    user_email = auth.current_user()
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return jsonify(status='not found user'), 404
+
+    if user.role != 'user' and user.role != 'moderator':
+        return jsonify(status='wrong role'), 404
+
     articles = Article.query.all()
     articles_list = {'articles_list': []}
     for article in articles:
@@ -66,6 +102,7 @@ def get_all_articles():  # noqa: E501
 
 
 @app.route('/articles/<id>', methods=['PUT'])
+@auth.login_required
 def update_article(id):  # noqa: E501
     """Updated article
 
@@ -76,6 +113,14 @@ def update_article(id):  # noqa: E501
 
     :rtype: None
     """
+    user_email = auth.current_user()
+    user = User.query.filter_by(email=user_email).first()
+    if user is None:
+        return jsonify(status='not found user'), 404
+
+    if user.role != 'user' and user.role != 'moderator':
+        return jsonify(status='wrong role'), 404
+
     article = Article.query.filter_by(id=id).first()
     if article is None:
         return jsonify(status='article not found'), 404

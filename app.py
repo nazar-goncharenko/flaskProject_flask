@@ -1,25 +1,23 @@
 from flask import Flask
-from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from flask_httpauth import HTTPBasicAuth
+
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
 app.debug = True
 app.config['SECRET_KEY'] = 'secret key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{server}/{database}'.format(
-    user='root', password='root', server='localhost', database='pp_6')
+    user='root', password='root', server='localhost', database='pp_db')
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-manager = Manager(app)
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-manager.add_command('db', MigrateCommand)
+engine = db.engine
 
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+from controllers.article_controller import *
+from controllers.user_controller import *
+from controllers.moderator_controller import *
 
-SessionFactory = sessionmaker(bind=engine)
-
-BaseModel = declarative_base()
+if __name__ == '__main__':
+    db.create_all()
+    app.run()

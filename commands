@@ -7,3 +7,6 @@ alembic revision --autogenerate
 alembic upgrade head
 
 alembic stamp head
+
+coverage run -m unittest discover
+coverage report -m

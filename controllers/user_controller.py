@@ -13,8 +13,11 @@ def index():
 def verify_password(email, password):
     if not (email and password):
         return False
-    userTest = User.query.filter_by(email=email).first()
-    return check_password_hash(userTest.password, password)
+    user_test = User.query.filter_by(email=email).first()
+    if user_test is None:
+        return False
+    else:
+        return check_password_hash(user_test.password, password)
 
 
 @auth.error_handler

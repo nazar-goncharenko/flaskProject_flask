@@ -20,9 +20,6 @@ class User(db.Model):
         self.userStatus = userStatus
         self.role = role
 
-    def get_role(self):
-        return [self.role]
-
 
 class Article(db.Model):
     __tablename__ = 'article'

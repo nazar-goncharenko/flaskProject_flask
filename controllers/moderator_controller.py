@@ -1,4 +1,4 @@
-from app import app, db, auth
+from config import app, db, auth
 from models import *
 from flask import request, jsonify, json
 

@@ -1,15 +1,11 @@
-from app import app, auth, db
+from config import app, auth, db
 from models import *
 from flask import request, jsonify, json
 
 
 @app.route('/articles', methods=['POST'])
 @auth.login_required
-def add_article():  # noqa: E501
-    """adds an inventory item
-
-    Adds an item to the system
-    """
+def add_article():
     user_email = auth.current_user()
     user = User.query.filter_by(email=user_email).first()
     if user is None:

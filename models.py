@@ -1,5 +1,7 @@
-from app import db
+from config import db
 from werkzeug.security import generate_password_hash
+import enum
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -18,8 +20,6 @@ class User(db.Model):
         self.userStatus = userStatus
         self.role = role
 
-    def get_role(self):
-        return [self.role]
 
 class Article(db.Model):
     __tablename__ = 'article'
@@ -28,8 +28,6 @@ class Article(db.Model):
     name = db.Column('name', db.VARCHAR(20), nullable=False)
     text = db.Column('text', db.TEXT(2000), nullable=False)
 
-
-import enum
 
 class StatusEnum(enum.Enum):
     pending = 'pending'
@@ -45,4 +43,3 @@ class PArticle(db.Model):
     name = db.Column('name', db.VARCHAR(20), nullable=False)
     text = db.Column('text', db.TEXT(2000), nullable=False)
     status = db.Column('status', db.Enum(StatusEnum), nullable=False)
-
